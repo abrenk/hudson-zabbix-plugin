@@ -11,6 +11,9 @@ import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.StaplerRequest;
 
+import com.andreasbrenk.zabbix.ZabbixAgent;
+import com.andreasbrenk.zabbix.impl.ZabbixAgentServiceImpl;
+
 /**
  * Entry point of Zabbix plugin.
  * 
@@ -19,12 +22,19 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 public class PluginImpl extends Plugin {
 
-    private int port = 10050;
+    private int port = ZabbixAgent.DEFAULT_PORT;
+
+    private transient final ZabbixAgent zabbixAgent;
+
+    public PluginImpl() {
+        this.zabbixAgent = new ZabbixAgentServiceImpl();
+    }
 
     @Override
     public void configure(final StaplerRequest req, final JSONObject formData) throws IOException,
             ServletException, FormException {
-        this.port = formData.optInt("port", 10050);
+        this.port = formData.optInt("port", ZabbixAgent.DEFAULT_PORT);
+
         save();
     }
 
@@ -35,6 +45,13 @@ public class PluginImpl extends Plugin {
     @Override
     public void start() throws Exception {
         load();
+
+        this.zabbixAgent.start(this.port);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        this.zabbixAgent.stop();
     }
 
 }
