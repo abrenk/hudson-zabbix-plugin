@@ -28,6 +28,7 @@ public class PluginImpl extends Plugin {
 
     public PluginImpl() {
         this.zabbixAgent = new ZabbixAgentServiceImpl();
+        this.zabbixAgent.addItem(new HudsonIdleExecutorsItem());
         this.zabbixAgent.addItem(new HudsonNumExecutorsItem());
         this.zabbixAgent.addItem(new HudsonQueueLengthItem());
         this.zabbixAgent.addItem(new HudsonTotalExecutorsItem());
