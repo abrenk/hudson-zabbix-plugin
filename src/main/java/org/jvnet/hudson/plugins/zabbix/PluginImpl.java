@@ -28,6 +28,7 @@ public class PluginImpl extends Plugin {
 
     public PluginImpl() {
         this.zabbixAgent = new ZabbixAgentServiceImpl();
+        this.zabbixAgent.addItem(new HudsonVersionItem());
     }
 
     @Override
